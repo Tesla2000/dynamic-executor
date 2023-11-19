@@ -1,7 +1,7 @@
 from src.dynthon.DynamicClass import DynamicClass
 
 print("importing foo")
-foo = 'foo'
+foo = "foo"
 
 
 def function():

@@ -1,5 +1,3 @@
-__all__ = [
-    'DynamicClass'
-]
+__all__ = ["DynamicClass"]
 
 from .DynamicClass import DynamicClass
