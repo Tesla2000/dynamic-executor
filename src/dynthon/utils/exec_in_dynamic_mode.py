@@ -1,7 +1,8 @@
 import traceback
 from pathlib import Path
 
-from src.dynthon.utils import get_modules, re_import
+from src.dynthon.utils import get_modules
+from src.dynthon.utils.re_import import re_import_modules
 
 
 def exec_in_dynamic_mode(
@@ -24,7 +25,5 @@ def exec_in_dynamic_mode(
             traceback.print_exc()
         if not finnish_upon_success or not done:
             modules = get_modules()
-            for module_name in modules:
-                re_import(module_name)
-            continue
+            re_import_modules(modules, local_vars, global_vars)
         return
