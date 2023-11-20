@@ -1,4 +1,4 @@
-from src.dynthon.DynamicClass import DynamicClass
+from src.dynthon.classes.DynamicClassModule import DynamicClass
 
 print("importing foo")
 foo = "foo"

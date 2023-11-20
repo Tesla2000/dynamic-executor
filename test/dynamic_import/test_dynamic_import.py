@@ -6,7 +6,7 @@ from src.dynthon.utils.re_import import re_import
 if __name__ == "__main__":
     parent = Path(__file__).parent
     parent.joinpath("ImportedModule.py").write_text(
-        parent.joinpath("ImportedModuleValid.py").read_text()
+        parent.joinpath("ImportedModuleBackUpModified.py").read_text()
     )
     try:
         standard_instance = ImportedModule.StandardClass()
@@ -24,5 +24,5 @@ if __name__ == "__main__":
         raise e
     finally:
         parent.joinpath("ImportedModule.py").write_text(
-            parent.joinpath("ImportedModuleFaulty.py").read_text()
+            parent.joinpath("ImportedModuleBackUp.py").read_text()
         )

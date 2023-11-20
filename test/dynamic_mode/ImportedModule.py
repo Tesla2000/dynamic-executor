@@ -1,6 +1,6 @@
-from src.dynthon.DynamicClass import DynamicClass
+from src.dynthon.classes.DynamicClassModule import DynamicClass
 
 
 class SomeDynamicClass(DynamicClass):
     def foo(self):
-        pass
+        raise ValueError

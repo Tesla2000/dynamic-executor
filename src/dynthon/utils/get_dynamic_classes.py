@@ -1,5 +1,5 @@
 from .module_type import module_type
-from ..DynamicClassCreator import DynamicClassCreator
+from src.dynthon.classes.DynamicClassCreator import DynamicClassCreator
 
 
 def get_dynamic_classes(module: module_type) -> dict[str, DynamicClassCreator]:

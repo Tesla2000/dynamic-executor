@@ -3,7 +3,7 @@ from pathlib import Path
 from time import sleep
 
 import ImportedModule
-from src.dynthon.exec_in_dynamic_mode import exec_in_dynamic_mode
+from src.dynthon.utils.exec_in_dynamic_mode import exec_in_dynamic_mode
 
 if __name__ == "__main__":
     parent = Path(__file__).parent
@@ -22,5 +22,5 @@ if __name__ == "__main__":
     parent.joinpath("ImportedModule.py").write_text(
         parent.joinpath("ImportedModuleValid.py").read_text()
     )
-    sleep(1)
+    sleep(1000)
     assert not thread.is_alive()  # test not working properly for some reason

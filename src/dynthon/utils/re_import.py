@@ -3,6 +3,7 @@ import sys
 
 from .get_defined_in_module import get_defined_in_module
 from .get_dynamic_classes import get_dynamic_classes
+from .module_type import module_type
 
 
 def re_import(module_name: str):
@@ -19,3 +20,18 @@ def re_import(module_name: str):
         new_class._instances = dynamic_class._instances
     sys.modules[module_name] = module
     return module
+
+
+def re_import_modules(modules: dict, __locals: dict, __globals: dict):
+    local_modules = dict(**__locals)
+    for key, var in __globals.items():
+        if key in local_modules:
+            continue
+        local_modules[key] = var
+    local_modules = dict((key, value) for key, value in local_modules.items() if isinstance(value, module_type) and key != '__builtins__')
+    for module_name, module in modules.items():
+        if module_name in local_modules:
+            continue
+        del sys.modules[module_name]
+    tuple(map(importlib.reload, local_modules.values()))
+

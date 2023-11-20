@@ -1,7 +1,7 @@
 from typing import Any
 
 from .module_type import module_type
-from ..DynamicClassCreator import DynamicClassCreator
+from src.dynthon.classes.DynamicClassCreator import DynamicClassCreator
 
 
 def get_defined_in_module(module: module_type) -> dict[str, Any]:
