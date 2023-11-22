@@ -9,9 +9,7 @@ if __name__ == "__main__":
         parent.joinpath("ImportedModuleFaulty.py").read_text()
     )
     some_dynamic_function = ImportedModule.some_dynamic_function
-    exec_in_dynamic_mode(
-        locals(), globals(), parent.joinpath("test_executor.py")
-    )
+    exec_in_dynamic_mode(locals(), globals(), parent.joinpath("test_executor.py"))
     parent.joinpath("ImportedModule.py").write_text(
         parent.joinpath("ImportedModuleFaulty.py").read_text()
     )

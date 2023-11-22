@@ -9,7 +9,9 @@ from .get_dynamic_classes import get_dynamic_classes
 from ..classes.DynamicClassCreator import DynamicClassCreator
 
 
-def re_import(module_name: str, dynamic_classes: dict[str, dict[str, DynamicClassCreator]]) -> ModuleType:
+def re_import(
+    module_name: str, dynamic_classes: dict[str, dict[str, DynamicClassCreator]]
+) -> ModuleType:
     if module_name in sys.modules:
         return sys.modules[module_name]
     re_imported_module = importlib.import_module(module_name)
@@ -22,10 +24,30 @@ def re_import(module_name: str, dynamic_classes: dict[str, dict[str, DynamicClas
 
 
 def re_import_modules(modules: dict[str, ModuleType], __locals: dict, __globals: dict):
-    locals_from_modules = dict((key, module) for key, value in __locals.items() if isinstance(value, Callable) and (module := getmodule(value)) and module in modules.values())
-    globals_from_modules = dict((key, module) for key, value in __globals.items() if isinstance(value, Callable) and (module := getmodule(value)) and module in modules.values())
-    local_modules = dict((key, value) for key, value in __locals.items() if isinstance(value, ModuleType) and key != '__builtins__')
-    global_modules = dict((key, value) for key, value in __globals.items() if isinstance(value, ModuleType) and key != '__builtins__')
+    locals_from_modules = dict(
+        (key, module)
+        for key, value in __locals.items()
+        if isinstance(value, Callable)
+        and (module := getmodule(value))
+        and module in modules.values()
+    )
+    globals_from_modules = dict(
+        (key, module)
+        for key, value in __globals.items()
+        if isinstance(value, Callable)
+        and (module := getmodule(value))
+        and module in modules.values()
+    )
+    local_modules = dict(
+        (key, value)
+        for key, value in __locals.items()
+        if isinstance(value, ModuleType) and key != "__builtins__"
+    )
+    global_modules = dict(
+        (key, value)
+        for key, value in __globals.items()
+        if isinstance(value, ModuleType) and key != "__builtins__"
+    )
     all_modules = ChainMap(local_modules, global_modules)
     for variable, module in locals_from_modules.items():
         all_modules[module.__name__] = module
@@ -35,10 +57,22 @@ def re_import_modules(modules: dict[str, ModuleType], __locals: dict, __globals:
     for module_name, module in modules.items():
         dynamic_classes[module_name] = get_dynamic_classes(module)
         del sys.modules[module_name]
-    local_modules = dict((variable, re_import(module.__name__, dynamic_classes)) for variable, module in local_modules.items())
-    global_modules = dict((variable, re_import(module.__name__, dynamic_classes)) for variable, module in global_modules.items())
-    locals_from_modules = dict((variable, getattr(re_import(module.__name__, dynamic_classes), variable)) for variable, module in locals_from_modules.items())
-    globals_from_modules = dict((variable, getattr(re_import(module.__name__, dynamic_classes), variable)) for variable, module in globals_from_modules.items())
+    local_modules = dict(
+        (variable, re_import(module.__name__, dynamic_classes))
+        for variable, module in local_modules.items()
+    )
+    global_modules = dict(
+        (variable, re_import(module.__name__, dynamic_classes))
+        for variable, module in global_modules.items()
+    )
+    locals_from_modules = dict(
+        (variable, getattr(re_import(module.__name__, dynamic_classes), variable))
+        for variable, module in locals_from_modules.items()
+    )
+    globals_from_modules = dict(
+        (variable, getattr(re_import(module.__name__, dynamic_classes), variable))
+        for variable, module in globals_from_modules.items()
+    )
     tuple(map(importlib.import_module, all_modules.keys()))
     for variable, value in locals_from_modules.items():
         __locals[variable] = value
