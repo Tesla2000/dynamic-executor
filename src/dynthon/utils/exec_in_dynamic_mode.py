@@ -26,4 +26,5 @@ def exec_in_dynamic_mode(
         if not finnish_upon_success or not done:
             modules = get_modules()
             re_import_modules(modules, local_vars, global_vars)
-        return
+        else:
+            return
