@@ -9,7 +9,12 @@ if __name__ == "__main__":
     parent.joinpath("ImportedModule.py").write_text(
         parent.joinpath("ImportedModuleFaulty.py").read_text()
     )
-    exec_in_dynamic_mode(locals(), globals(), parent.joinpath("test_executor.py"))
+    for index, error in enumerate(exec_in_dynamic_mode(locals(), globals(), parent.joinpath("test_executor.py"))):
+        if index:
+            assert False
+        parent.joinpath("ImportedModule.py").write_text(
+            parent.joinpath("ImportedModuleValid.py").read_text()
+        )
     parent.joinpath("ImportedModule.py").write_text(
         parent.joinpath("ImportedModuleFaulty.py").read_text()
     )
