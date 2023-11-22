@@ -9,6 +9,7 @@ if __name__ == "__main__":
         parent.joinpath("ImportedModuleFaulty.py").read_text()
     )
     some_dynamic_function = ImportedModule.some_dynamic_function
+    index = -1
     for index, error in enumerate(exec_in_dynamic_mode(locals(), globals(), parent.joinpath("test_executor.py"))):
         if index:
             assert False
@@ -18,3 +19,4 @@ if __name__ == "__main__":
     parent.joinpath("ImportedModule.py").write_text(
         parent.joinpath("ImportedModuleFaulty.py").read_text()
     )
+    assert index != -1
