@@ -24,6 +24,6 @@ if __name__ == "__main__":
     except Exception as e:
         raise e
     finally:
-        parent.joinpath("py").write_text(
+        parent.joinpath("ImportedModule.py").write_text(
             parent.joinpath("ImportedModuleBackUp.py").read_text()
         )

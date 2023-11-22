@@ -9,10 +9,8 @@ def function():
 
 
 class StandardClass:
-    def foo(self):
-        pass
+    pass
 
 
 class SomeDynamicClass(DynamicClass):
-    def foo(self):
-        pass
+    pass
