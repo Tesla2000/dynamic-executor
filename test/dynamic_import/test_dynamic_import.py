@@ -1,7 +1,8 @@
 from pathlib import Path
 
 import ImportedModule
-from src.dynthon.utils.re_import import re_import
+from src.dynthon.utils import get_modules
+from src.dynthon.utils.re_import import re_import_modules
 
 if __name__ == "__main__":
     parent = Path(__file__).parent
@@ -15,9 +16,9 @@ if __name__ == "__main__":
         assert isinstance(standard_instance, ImportedModule.StandardClass)
         assert not hasattr(ImportedModule.SomeDynamicClass, "foo")
         assert isinstance(dynamic_instance, ImportedModule.SomeDynamicClass)
-        ImportedModule = re_import("ImportedModule")
-        assert not hasattr(ImportedModule.StandardClass, "foo")
-        assert isinstance(standard_instance, ImportedModule.StandardClass)
+        re_import_modules(get_modules(), locals(), globals())
+        assert hasattr(ImportedModule.StandardClass, "foo")
+        assert not isinstance(standard_instance, ImportedModule.StandardClass)
         assert hasattr(ImportedModule.SomeDynamicClass, "foo")
         assert isinstance(dynamic_instance, ImportedModule.SomeDynamicClass)
     except Exception as e:
