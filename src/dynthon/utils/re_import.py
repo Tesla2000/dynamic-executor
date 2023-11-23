@@ -16,6 +16,13 @@ def re_import(
         return sys.modules[module_name]
     re_imported_module = importlib.import_module(module_name)
     for variable, dynamic_class in dynamic_classes[module_name].items():
+        for module in dynamic_class._modifications[1:]:
+            if module is None:
+                continue
+            try:
+                importlib.import_module(module)
+            except ModuleNotFoundError:
+                continue
         new_class = getattr(re_imported_module, variable)
         for instance in dynamic_class._instances:
             instance.__class__ = new_class

@@ -4,6 +4,7 @@ import platform
 
 venv_module = f"python{'.'.join(sys.version.split('.')[:2])}" if platform.system() == 'Linux' else f"Python{''.join(sys.version.split('.')[:2])}"
 
+
 def get_modules():
     return dict(
         (variable, value)
