@@ -23,6 +23,12 @@ def re_import(
     return re_imported_module
 
 
+def get_module_variable(module: ModuleType, __locals: dict, variable: str) -> str:
+    if hasattr(module, variable):
+        return variable
+    return next(var for var in dir(module) if __locals[variable] == getattr(module, var))
+
+
 def re_import_modules(modules: dict[str, ModuleType], __locals: dict, __globals: dict):
     locals_from_modules = dict(
         (key, module)
@@ -48,11 +54,15 @@ def re_import_modules(modules: dict[str, ModuleType], __locals: dict, __globals:
         for key, value in __globals.items()
         if isinstance(value, ModuleType) and key != "__builtins__"
     )
+    local_as_translations = {}
+    global_as_translations = {}
     all_modules = ChainMap(local_modules, global_modules)
     for variable, module in locals_from_modules.items():
         all_modules[module.__name__] = module
+        local_as_translations[variable] = get_module_variable(module, __locals, variable)
     for variable, module in globals_from_modules.items():
         all_modules[module.__name__] = module
+        global_as_translations[variable] = get_module_variable(module, __globals, variable)
     dynamic_classes = {}
     for module_name, module in modules.items():
         dynamic_classes[module_name] = get_dynamic_classes(module)
@@ -66,11 +76,11 @@ def re_import_modules(modules: dict[str, ModuleType], __locals: dict, __globals:
         for variable, module in global_modules.items()
     )
     locals_from_modules = dict(
-        (variable, getattr(re_import(module.__name__, dynamic_classes), variable))
+        (variable, getattr(re_import(module.__name__, dynamic_classes), local_as_translations[variable]))
         for variable, module in locals_from_modules.items()
     )
     globals_from_modules = dict(
-        (variable, getattr(re_import(module.__name__, dynamic_classes), variable))
+        (variable, getattr(re_import(module.__name__, dynamic_classes), global_as_translations[variable]))
         for variable, module in globals_from_modules.items()
     )
     tuple(map(importlib.import_module, all_modules.keys()))
