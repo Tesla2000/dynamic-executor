@@ -1,4 +1,4 @@
-from ImportedModule1 import SomeClass as SC, SomeDynamicClasses as SDC
+from ImportedModule1 import SomeClass as SC, SomeDynamicClass as SDC
 from src.dynthon.utils import get_modules
 from src.dynthon.utils.re_import import re_import_modules
 

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from ImportedModule1 import SomeClass
+from ImportedModule1 import SomeClass, SomeDynamicClass
 from src.dynthon.utils import get_modules
 from src.dynthon.utils.re_import import re_import_modules
 
@@ -11,10 +11,13 @@ if __name__ == "__main__":
     )
     try:
         some_instance = SomeClass()
+        some_dynami_instance = SomeDynamicClass()
         modules = get_modules()
         re_import_modules(modules, locals(), globals())
         assert not isinstance(some_instance, SomeClass)
-        assert hasattr(some_instance, 'foo')
+        assert isinstance(some_dynami_instance, SomeDynamicClass)
+        assert not hasattr(some_instance, 'foo')
+        assert hasattr(some_dynami_instance, 'foo')
     finally:
         parent.joinpath("ImportedModule2.py").write_text(
             parent.joinpath("ImportedModuleBackUp.py").read_text()

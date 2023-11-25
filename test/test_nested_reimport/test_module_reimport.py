@@ -11,10 +11,13 @@ if __name__ == "__main__":
     )
     try:
         some_instance = ImportedModule1.SomeClass()
+        some_dynami_instance = ImportedModule1.SomeDynamicClass()
         modules = get_modules()
         re_import_modules(modules, locals(), globals())
         assert not isinstance(some_instance, ImportedModule1.SomeClass)
-        assert hasattr(some_instance, 'foo')
+        assert isinstance(some_dynami_instance, ImportedModule1.SomeDynamicClass)
+        assert not hasattr(some_instance, 'foo')
+        assert hasattr(some_dynami_instance, 'foo')
     finally:
         parent.joinpath("ImportedModule2.py").write_text(
             parent.joinpath("ImportedModuleBackUp.py").read_text()

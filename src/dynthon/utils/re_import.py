@@ -54,10 +54,7 @@ def re_import_modules(modules: OrderedDict[str, ModuleType], __locals: dict, __g
     local_as_translations = dict((variable, get_module_variable(module, __locals, variable)) for variable, module in locals_from_modules.items())
     global_as_translations = dict((variable, get_module_variable(module, __globals, variable)) for variable, module in globals_from_modules.items())
     dynamic_classes = dict((module_name, get_dynamic_classes(module)) for module_name, module in modules.items())
-    tuple(map(sys.modules.__delitem__, modules.keys()))
-    tuple(map(importlib.import_module, modules.keys()))
-    # assert hasattr(sys.modules['test.test_nested_reimport.ImportedModule2'].SomeClass, 'foo')
-    # assert hasattr(sys.modules['ImportedModule1'].SomeClass, 'foo')
+    tuple(map(importlib.reload, modules.values()))
     local_modules = dict(
         (variable, re_import_dynamic_classes(module.__name__, dynamic_classes))
         for variable, module in local_modules.items()
