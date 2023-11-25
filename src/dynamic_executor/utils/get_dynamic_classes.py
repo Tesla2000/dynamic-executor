@@ -1,6 +1,6 @@
 from types import ModuleType
 
-from src.dynamic_executor.classes.DynamicClassCreator import DynamicClassCreator
+from ..classes.DynamicClassCreator import DynamicClassCreator
 
 
 def get_dynamic_classes(module: ModuleType) -> dict[str, DynamicClassCreator]:
