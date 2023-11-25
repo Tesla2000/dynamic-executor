@@ -1,5 +1,4 @@
 import importlib
-import sys
 from inspect import getmodule
 from types import ModuleType
 from typing import Callable, OrderedDict

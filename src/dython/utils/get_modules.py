@@ -16,7 +16,7 @@ def get_modules():
         and not any(
             map(
                 variable.__contains__,
-                ("dynthon", "pyexpat", "pydev", "xml.parsers.expat.", "typing.", 'cython_runtime'),
+                ("dython", "pyexpat", "pydev", "xml.parsers.expat.", "typing.", 'cython_runtime'),
             )
         )
     )

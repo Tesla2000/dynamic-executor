@@ -1,18 +1,18 @@
-# DbClass module for automatic serialization and deserialization
+# Dynamic-python library for changing python code during runtime
 
-DbClass module is ment to be used in conjunction with databases or json which require serialization to save data to and deserialization to get data from.
+Dynamic python is ment to be used in test development for creating and updating tests or wherever the need arises to change the code during runtime and have results visible instantaneously without restarting. The main functionality is provided by `exec_in_dynamic_mode` generator that reloads all project-root modules (neither builtin not venv modules are reloaded)
 
 ## Installation
 
-You can install the `db_class` package using pip:
+You can install the `dynamic-python` package using pip:
 
 ```bash
-pip install dynthon
+pip install dynamic-python
 ```
 
 ### Example
 
-Here's an example of how to use the `simulate_game` function:
+Here's an example of how to use the `exec_in_dynamic_mode` function:
 
 ```python
 import json

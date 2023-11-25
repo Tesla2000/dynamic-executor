@@ -1,4 +1,4 @@
-from src.dynthon.classes.DynamicClassModule import DynamicClass
+from src.dython.classes.DynamicClassModule import DynamicClass
 
 
 class SomeDynamicClass(DynamicClass):

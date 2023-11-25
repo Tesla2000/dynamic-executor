@@ -2,8 +2,8 @@ import traceback
 from pathlib import Path
 from typing import Generator
 
-from src.dynthon.utils import get_modules
-from src.dynthon.utils.re_import import re_import_modules
+from src.dython.utils import get_modules
+from src.dython.utils.re_import import re_import_modules
 
 
 def exec_in_dynamic_mode(

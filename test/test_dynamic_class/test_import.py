@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import ImportedModule
-from src.dynthon.utils.exec_in_dynamic_mode import exec_in_dynamic_mode
+from src.dython.utils.exec_in_dynamic_mode import exec_in_dynamic_mode
 
 if __name__ == "__main__":
     parent = Path(__file__).parent
