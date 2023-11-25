@@ -1,19 +1,19 @@
-# Dynamic-python library for changing python code during runtime
+# Dynamic-executor library for changing python code during runtime
 
 Dynamic python is ment to be used in test development for creating and updating tests or wherever the need arises to change the code during runtime and have results visible instantaneously without restarting. The main functionality is provided by `exec_in_dynamic_mode` generator that reloads all project-root modules (neither builtin not venv modules are reloaded)
 
 ## Installation
 
-You can install the `dynamic-python` package using pip:
+You can install the `dynamic-executor` package using pip:
 
 ```bash
-pip install dynamic-python
+pip install dynamic-executor
 ```
 
 Or by cloning the repository directly :
 
 ```bash
-git clone git@github.com:Tesla2000/dython.git
+git clone git@github.com:Tesla2000/dynamic_executor.git
 ```
 
 ### Example

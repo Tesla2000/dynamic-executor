@@ -1,7 +1,7 @@
 from types import ModuleType
 from typing import Any
 
-from src.dython.classes.DynamicClassCreator import DynamicClassCreator
+from src.dynamic_executor.classes.DynamicClassCreator import DynamicClassCreator
 
 
 def get_defined_in_module(module: ModuleType) -> dict[str, Any]:

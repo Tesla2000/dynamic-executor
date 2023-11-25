@@ -1,8 +1,8 @@
 from pathlib import Path
 
 import ImportedModule1
-from src.dython.utils import get_modules
-from src.dython.utils.re_import import re_import_modules
+from src.dynamic_executor.utils import get_modules
+from src.dynamic_executor.utils.re_import import re_import_modules
 
 if __name__ == "__main__":
     parent = Path(__file__).parent

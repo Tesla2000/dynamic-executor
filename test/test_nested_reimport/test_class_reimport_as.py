@@ -1,7 +1,7 @@
 from pathlib import Path
 from ImportedModule1 import SomeClass as SC, SomeDynamicClass as SDC
-from src.dython.utils import get_modules
-from src.dython.utils.re_import import re_import_modules
+from src.dynamic_executor.utils import get_modules
+from src.dynamic_executor.utils.re_import import re_import_modules
 
 if __name__ == "__main__":
     parent = Path(__file__).parent

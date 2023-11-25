@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from ImportedModule import some_dynamic_function
-from src.dython.utils.exec_in_dynamic_mode import exec_in_dynamic_mode
+from src.dynamic_executor.utils.exec_in_dynamic_mode import exec_in_dynamic_mode
 
 if __name__ == "__main__":
     __all__ = ["some_dynamic_function"]
