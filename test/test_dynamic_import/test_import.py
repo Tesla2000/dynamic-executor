@@ -21,8 +21,6 @@ if __name__ == "__main__":
         assert not isinstance(standard_instance, ImportedModule.StandardClass)
         assert hasattr(ImportedModule.SomeDynamicClass, "foo")
         assert isinstance(dynamic_instance, ImportedModule.SomeDynamicClass)
-    except Exception as e:
-        raise e
     finally:
         parent.joinpath("ImportedModule.py").write_text(
             parent.joinpath("ImportedModuleBackUp.py").read_text()

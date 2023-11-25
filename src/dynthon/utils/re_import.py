@@ -1,6 +1,5 @@
 import importlib
 import sys
-from collections import ChainMap
 from inspect import getmodule
 from types import ModuleType
 from typing import Callable, OrderedDict
@@ -9,11 +8,9 @@ from .get_dynamic_classes import get_dynamic_classes
 from ..classes.DynamicClassCreator import DynamicClassCreator
 
 
-def re_import(
+def re_import_dynamic_classes(
     module_name: str, dynamic_classes: dict[str, dict[str, DynamicClassCreator]]
 ) -> ModuleType:
-    if module_name in sys.modules:
-        return sys.modules[module_name]
     re_imported_module = importlib.import_module(module_name)
     for variable, dynamic_class in dynamic_classes[module_name].items():
         new_class = getattr(re_imported_module, variable)
@@ -54,36 +51,29 @@ def re_import_modules(modules: OrderedDict[str, ModuleType], __locals: dict, __g
         for key, value in __globals.items()
         if isinstance(value, ModuleType) and key != "__builtins__"
     )
-    local_as_translations = {}
-    global_as_translations = {}
-    all_modules = ChainMap(local_modules, global_modules)
-    for variable, module in locals_from_modules.items():
-        all_modules[module.__name__] = module
-        local_as_translations[variable] = get_module_variable(module, __locals, variable)
-    for variable, module in globals_from_modules.items():
-        all_modules[module.__name__] = module
-        global_as_translations[variable] = get_module_variable(module, __globals, variable)
-    dynamic_classes = {}
-    for module_name, module in modules.items():
-        dynamic_classes[module_name] = get_dynamic_classes(module)
-        del sys.modules[module_name]
+    local_as_translations = dict((variable, get_module_variable(module, __locals, variable)) for variable, module in locals_from_modules.items())
+    global_as_translations = dict((variable, get_module_variable(module, __globals, variable)) for variable, module in globals_from_modules.items())
+    dynamic_classes = dict((module_name, get_dynamic_classes(module)) for module_name, module in modules.items())
+    tuple(map(sys.modules.__delitem__, modules.keys()))
+    tuple(map(importlib.import_module, modules.keys()))
+    # assert hasattr(sys.modules['test.test_nested_reimport.ImportedModule2'].SomeClass, 'foo')
+    # assert hasattr(sys.modules['ImportedModule1'].SomeClass, 'foo')
     local_modules = dict(
-        (variable, re_import(module.__name__, dynamic_classes))
+        (variable, re_import_dynamic_classes(module.__name__, dynamic_classes))
         for variable, module in local_modules.items()
     )
     global_modules = dict(
-        (variable, re_import(module.__name__, dynamic_classes))
+        (variable, re_import_dynamic_classes(module.__name__, dynamic_classes))
         for variable, module in global_modules.items()
     )
     locals_from_modules = dict(
-        (variable, getattr(re_import(module.__name__, dynamic_classes), local_as_translations[variable]))
+        (variable, getattr(re_import_dynamic_classes(module.__name__, dynamic_classes), local_as_translations[variable]))
         for variable, module in locals_from_modules.items()
     )
     globals_from_modules = dict(
-        (variable, getattr(re_import(module.__name__, dynamic_classes), global_as_translations[variable]))
+        (variable, getattr(re_import_dynamic_classes(module.__name__, dynamic_classes), global_as_translations[variable]))
         for variable, module in globals_from_modules.items()
     )
-    tuple(map(importlib.import_module, all_modules.keys()))
     for variable, value in locals_from_modules.items():
         __locals[variable] = value
     for variable, value in globals_from_modules.items():
