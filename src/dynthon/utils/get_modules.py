@@ -1,12 +1,13 @@
 import re
 import sys
 import platform
+from collections import OrderedDict
 
 venv_module = f"python{'.'.join(sys.version.split('.')[:2])}" if platform.system() == 'Linux' else f"Python{''.join(sys.version.split('.')[:2])}"
 
 
 def get_modules():
-    return dict(
+    return OrderedDict(
         (variable, value)
         for variable, value in sys.modules.items()
         if not re.findall(r"module \'[^\']+\' \((?:built-in|frozen)\)", str(value))

@@ -3,7 +3,7 @@ import sys
 from collections import ChainMap
 from inspect import getmodule
 from types import ModuleType
-from typing import Callable
+from typing import Callable, OrderedDict
 
 from .get_dynamic_classes import get_dynamic_classes
 from ..classes.DynamicClassCreator import DynamicClassCreator
@@ -16,13 +16,6 @@ def re_import(
         return sys.modules[module_name]
     re_imported_module = importlib.import_module(module_name)
     for variable, dynamic_class in dynamic_classes[module_name].items():
-        for module in dynamic_class._modifications[1:]:
-            if module is None:
-                continue
-            try:
-                importlib.import_module(module)
-            except ModuleNotFoundError:
-                continue
         new_class = getattr(re_imported_module, variable)
         for instance in dynamic_class._instances:
             instance.__class__ = new_class
@@ -36,7 +29,7 @@ def get_module_variable(module: ModuleType, __locals: dict, variable: str) -> st
     return next(var for var in dir(module) if __locals[variable] == getattr(module, var))
 
 
-def re_import_modules(modules: dict[str, ModuleType], __locals: dict, __globals: dict):
+def re_import_modules(modules: OrderedDict[str, ModuleType], __locals: dict, __globals: dict):
     locals_from_modules = dict(
         (key, module)
         for key, value in __locals.items()
