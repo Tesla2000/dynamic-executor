@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from typing import Self
 import sys
 
 sys.modules = OrderedDict(sys.modules)
@@ -16,7 +15,7 @@ def new_wrapper(new):
 
 
 class DynamicClassCreator(type):
-    created_classes: list[Self] = []
+    created_classes: list["DynamicClassCreator"] = []
 
     def __new__(metacls, name, bases, namespace):
         new_class = super().__new__(metacls, name, bases, namespace)
