@@ -10,66 +10,54 @@ You can install the `dynamic-python` package using pip:
 pip install dynamic-python
 ```
 
+Or by cloning the repository directly :
+
+```bash
+git clone git@github.com:Tesla2000/dython.git
+```
+
 ### Example
 
 Here's an example of how to use the `exec_in_dynamic_mode` function:
 
 ```python
-import json
-import sys
-from dataclasses import dataclass
-from datetime import datetime
-from decimal import Decimal
-
-from src import DbClass
-from src import DbClassLiteral
+# ImportedModuleFaulty.py
+from dython import DynamicClass
 
 
-def test_serialize_literal():
-    @dataclass
-    class Bar(DbClassLiteral):
-        dictionary: dict
-        date: datetime
-        decimal: Decimal
+class SomeDynamicClass(DynamicClass):
+    def foo(self):
+        raise ValueError
+```
 
-    @dataclass
-    class Foo(DbClass):
-        dictionary: dict
-        date: datetime
-        decimal: Decimal
-        bar: Bar
-
-    foo = Foo({}, datetime.now(), Decimal(1), Bar({}, datetime.now(), Decimal(1)))
-    serialized = foo.get_db_representation()
-    try:
-        json.dump(serialized, sys.stdout)
-    except:
-        assert False
-    deserialized = Foo.from_dict(serialized)
-    assert deserialized == foo
+```python
+# ImportedModuleValid.py
+from dython import DynamicClass
 
 
-def test_serialize():
-    @dataclass
-    class Bar(DbClass):
-        dictionary: dict
-        date: datetime
-        decimal: Decimal
+class SomeDynamicClass(DynamicClass):
+    def foo(self):
+        pass
+```
 
-    @dataclass
-    class Foo(DbClass):
-        dictionary: dict
-        date: datetime
-        decimal: Decimal
-        bar: Bar
+```python
+# test_executor.py
+dynamic_instance.foo()
+```
 
-    foo = Foo({}, datetime.now(), Decimal(1), Bar({}, datetime.now(), Decimal(1)))
-    serialized = foo.get_db_representation()
-    foo.bar = foo.bar._id
-    try:
-        json.dump(serialized, sys.stdout)
-    except:
-        assert False
-    deserialized = Foo.from_dict(serialized)
-    assert deserialized == foo
+```python
+from dython import exec_in_dynamic_mode
+parent = Path(__file__).parent
+parent.joinpath("ImportedModule.py").write_text(
+    parent.joinpath("ImportedModuleFaulty.py").read_text()
+)  # faulty version of imported module
+from ImportedModule import SomeDynamicClass
+dynamic_instance = SomeDynamicClass()
+index = -1
+for index, error in enumerate(exec_in_dynamic_mode(locals(), globals(), parent.joinpath("test_executor.py"))):
+    if index:
+        assert False  # ensuring that the error is corrected
+    parent.joinpath("ImportedModule.py").write_text(
+        parent.joinpath("ImportedModuleValid.py").read_text()
+    )  # correcting module
 ```
