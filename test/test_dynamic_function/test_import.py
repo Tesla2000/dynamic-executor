@@ -10,7 +10,11 @@ if __name__ == "__main__":
     )
     some_dynamic_function = ImportedModule.some_dynamic_function
     index = -1
-    for index, error in enumerate(DynamicModeExecutor(parent.joinpath("test_executor.py")).execute(locals(), globals())):
+    for index, error in enumerate(
+        DynamicModeExecutor(parent.joinpath("test_executor.py")).execute(
+            locals(), globals()
+        )
+    ):
         if index:
             assert False
         parent.joinpath("ImportedModule.py").write_text(

@@ -3,7 +3,11 @@ import sys
 import platform
 from collections import OrderedDict
 
-venv_module = f"python{'.'.join(sys.version.split('.')[:2])}" if platform.system() == 'Linux' else f"Python{''.join(sys.version.split('.')[:2])}"
+venv_module = (
+    f"python{'.'.join(sys.version.split('.')[:2])}"
+    if platform.system() == "Linux"
+    else f"Python{''.join(sys.version.split('.')[:2])}"
+)
 
 
 def get_modules():
@@ -16,7 +20,14 @@ def get_modules():
         and not any(
             map(
                 variable.__contains__,
-                ("dynamic_executor", "pyexpat", "pydev", "xml.parsers.expat.", "typing.", 'cython_runtime'),
+                (
+                    "dynamic_executor",
+                    "pyexpat",
+                    "pydev",
+                    "xml.parsers.expat.",
+                    "typing.",
+                    "cython_runtime",
+                ),
             )
         )
     )

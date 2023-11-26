@@ -7,7 +7,12 @@ from .re_import import re_import_modules
 
 
 class DynamicModeExecutor:
-    def __init__(self, executor_path: Path = None, finnish_upon_success: bool = True, supress_print: bool = False):
+    def __init__(
+        self,
+        executor_path: Path = None,
+        finnish_upon_success: bool = True,
+        supress_print: bool = False,
+    ):
         if executor_path is None:
             executor_path = Path("executor.py")
         self.executor_path = executor_path
@@ -35,7 +40,9 @@ class DynamicModeExecutor:
         done = False
         while True:
             try:
-                compiled = compile(executor_path.read_text(), executor_path.name, "exec")
+                compiled = compile(
+                    executor_path.read_text(), executor_path.name, "exec"
+                )
                 exec(compiled, global_vars, local_vars)
                 done = True
             except:
