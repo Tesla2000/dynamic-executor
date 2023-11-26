@@ -16,7 +16,15 @@ Or by cloning the repository directly :
 git clone git@github.com:Tesla2000/dynamic_executor.git
 ```
 
-### Example
+### Access
+
+PyPI: https://pypi.org/project/dynamic-executor/
+
+Github: https://github.com/Tesla2000/dython
+
+### Usage
+
+You can go through video tutorial to check utilities of Dynamic Executor https://youtu.be/RZUzBU70eKA.
 
 Here's an example of how to use the `exec_in_dynamic_mode` function:
 
