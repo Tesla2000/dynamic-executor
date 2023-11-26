@@ -16,8 +16,8 @@ class DynamicModeExecutor:
 
     def execute(
         self,
-        local_vars: dict,
-        global_vars: dict,
+        local_vars: Dict,
+        global_vars: Dict,
         executor_path: Path = None,
         finnish_upon_success: bool = None,
         supress_print: bool = None,

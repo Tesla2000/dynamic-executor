@@ -1,14 +1,14 @@
 import importlib
 from inspect import getmodule
 from types import ModuleType
-from typing import Callable
+from typing import Callable, Dict
 
 from .get_dynamic_classes import get_dynamic_classes
 from ..classes.DynamicClassCreator import DynamicClassCreator
 
 
 def re_import_dynamic_classes(
-    module_name: str, dynamic_classes: dict[str, dict[str, DynamicClassCreator]]
+    module_name: str, dynamic_classes: Dict[str, Dict[str, DynamicClassCreator]]
 ) -> ModuleType:
     re_imported_module = importlib.import_module(module_name)
     for variable, dynamic_class in dynamic_classes[module_name].items():
@@ -19,13 +19,13 @@ def re_import_dynamic_classes(
     return re_imported_module
 
 
-def get_module_variable(module: ModuleType, __locals: dict, variable: str) -> str:
+def get_module_variable(module: ModuleType, __locals: Dict, variable: str) -> str:
     if hasattr(module, variable):
         return variable
     return next(var for var in dir(module) if __locals[variable] == getattr(module, var))
 
 
-def re_import_modules(modules: dict[str, ModuleType], __locals: dict, __globals: dict):
+def re_import_modules(modules: Dict[str, ModuleType], __locals: Dict, __globals: Dict):
     locals_from_modules = dict(
         (key, module)
         for key, value in __locals.items()
