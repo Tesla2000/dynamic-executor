@@ -52,5 +52,7 @@ class DynamicModeExecutor:
             if not finnish_upon_success or not done:
                 modules = get_modules()
                 re_import_modules(modules, local_vars, global_vars)
+                if done:
+                    yield
             else:
                 return
