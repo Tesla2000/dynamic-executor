@@ -1,7 +1,7 @@
 import importlib
 from inspect import getmodule
 from types import ModuleType
-from typing import Callable, OrderedDict
+from typing import Callable
 
 from .get_dynamic_classes import get_dynamic_classes
 from ..classes.DynamicClassCreator import DynamicClassCreator
@@ -25,7 +25,7 @@ def get_module_variable(module: ModuleType, __locals: dict, variable: str) -> st
     return next(var for var in dir(module) if __locals[variable] == getattr(module, var))
 
 
-def re_import_modules(modules: OrderedDict[str, ModuleType], __locals: dict, __globals: dict):
+def re_import_modules(modules: dict[str, ModuleType], __locals: dict, __globals: dict):
     locals_from_modules = dict(
         (key, module)
         for key, value in __locals.items()

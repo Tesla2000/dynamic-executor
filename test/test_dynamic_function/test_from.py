@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from ImportedModule import some_dynamic_function
-from src.dynamic_executor.utils.exec_in_dynamic_mode import exec_in_dynamic_mode
+from src.dynamic_executor.utils.DynamicModeExecutor import DynamicModeExecutor
 
 if __name__ == "__main__":
     __all__ = ["some_dynamic_function"]
@@ -10,7 +10,7 @@ if __name__ == "__main__":
         parent.joinpath("ImportedModuleFaulty.py").read_text()
     )
     index = -1
-    for index, error in enumerate(exec_in_dynamic_mode(locals(), globals(), parent.joinpath("test_executor.py"))):
+    for index, error in enumerate(DynamicModeExecutor(parent.joinpath("test_executor.py")).execute(locals(), globals())):
         if index:
             assert False
         parent.joinpath("ImportedModule.py").write_text(
