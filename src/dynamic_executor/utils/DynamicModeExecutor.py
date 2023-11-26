@@ -1,6 +1,6 @@
 import traceback
 from pathlib import Path
-from typing import Generator
+from typing import Generator, Dict
 
 from .get_modules import get_modules
 from .re_import import re_import_modules
