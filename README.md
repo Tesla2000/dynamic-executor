@@ -22,7 +22,7 @@ Here's an example of how to use the `exec_in_dynamic_mode` function:
 
 ```python
 # ImportedModuleFaulty.py
-from dython import DynamicClass
+from dynamic_executor import DynamicClass
 
 
 class SomeDynamicClass(DynamicClass):
@@ -32,7 +32,7 @@ class SomeDynamicClass(DynamicClass):
 
 ```python
 # ImportedModuleValid.py
-from dython import DynamicClass
+from dynamic_executor import DynamicClass
 
 
 class SomeDynamicClass(DynamicClass):
