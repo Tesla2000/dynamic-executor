@@ -5,6 +5,10 @@ from ..classes.DynamicClassCreator import DynamicClassCreator
 
 
 def get_dynamic_classes(module: ModuleType) -> Dict[str, DynamicClassCreator]:
+    """Collects all dynamic classes from a module.
+    :param module: A module to collect classes from.
+    :return: dictionary of (variable name, dynamic_class instance) pairs.
+    """
     return dict(
         (variable, getattr(module, variable))
         for variable in dir(module)
