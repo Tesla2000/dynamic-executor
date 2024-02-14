@@ -22,12 +22,15 @@ class DynamicModeExecutor:
         supress_print: bool = False,
     ):
         """
+
         :param executor_path: A path to an executor file, defaults to executor.py file parented by cwd.
-        :param finnish_upon_success: Specifies if there should be any iterations after a successful execution.
-        Defaults to True if False works as an infinite loop.
-        :param supress_print: Manages exception printing.
-        If True exception is printed as if it occurred during an uncontrolled runtime.
-        Exception is always yielded by loop not matter the argument.
+        :param finnish_upon_success:
+            Specifies if there should be any iterations after a successful execution.
+            Defaults to True if False works as an infinite loop.
+        :param supress_print:
+            Manages exception printing.
+            If True exception is printed as if it occurred during an uncontrolled runtime.
+            Exception is always yielded by loop not matter the argument.
         """
         self.executor_path = executor_path
         self.finnish_upon_success = finnish_upon_success
@@ -41,16 +44,18 @@ class DynamicModeExecutor:
         finnish_upon_success: bool = None,
         supress_print: bool = None,
     ) -> Generator[str, None, None]:
-        """
-        Method used to override class parameters and accept local and global parameters.
+        """Method used to override class parameters and accept local and global parameters.
+
         :param local_vars: local variables that can be a subject to change usually locals().
         :param global_vars: global variables that can be a subject to change usually global().
         :param executor_path: A path to an executor file, defaults to one in self.
-        :param finnish_upon_success: Specifies if there should be any iterations after a successful execution.
-        Defaults to a value in self.
-        :param supress_print: Manages exception printing.
-        If True exception is printed as if it occurred during an uncontrolled runtime.
-        Exception is always yielded by loop not matter the argument.
+        :param finnish_upon_success:
+            Specifies if there should be any iterations after a successful execution.
+            Defaults to a value in self.
+        :param supress_print:
+            Manages exception printing.
+            If True exception is printed as if it occurred during an uncontrolled runtime.
+            Exception is always yielded by loop not matter the argument.
         :return: Error message if one occurred during execution. None otherwise.
         """
         if executor_path is None:
