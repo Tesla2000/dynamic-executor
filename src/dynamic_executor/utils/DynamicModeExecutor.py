@@ -43,8 +43,8 @@ class DynamicModeExecutor:
     ) -> Generator[str, None, None]:
         """
         Method used to override class parameters and accept local and global parameters.
-        :param local_vars: local variables that can be a subject to change usually locals() or deepcopy(locals())
-        :param global_vars: global variables that can be a subject to change usually global() or deepcopy(global())
+        :param local_vars: local variables that can be a subject to change usually locals().
+        :param global_vars: global variables that can be a subject to change usually global().
         :param executor_path: A path to an executor file, defaults to one in self.
         :param finnish_upon_success: Specifies if there should be any iterations after a successful execution.
         Defaults to a value in self.
