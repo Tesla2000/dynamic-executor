@@ -45,13 +45,15 @@ def get_module_variable(module: ModuleType, locals_: Dict, variable: str) -> str
 def re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: Dict):
     """
     Re-imports specified module and updates local and global variables with changed values.
+
     :param modules: A dictionary of a (module name, module) pairs.
     :param locals_: local variables typically locals().
     :param globals_: global variables typically globals().
     """
     def get_valid_module(key: str, value: Any) -> Optional[Tuple[str, ModuleType]]:
         """
-        Gets an origi module of a given value if the value is not callable (these need no update).
+        Gets an origin module of a given value if the value is not callable (these need no update).
+
         :param key: A variable name.
         :param value: Any value to be matched.
         :return: A pair of (key, the original module of the value) or None

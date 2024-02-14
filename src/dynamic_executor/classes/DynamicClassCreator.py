@@ -2,8 +2,7 @@ from typing import List
 
 
 def new_wrapper(new):
-    """
-    Class __new__ method wrapper that ensures that the new instance is stored in _instances list of a dynamic class.
+    """Class __new__ method wrapper that ensures that the new instance is stored in _instances list of a dynamic class.
     """
 
     def wrapper(cls, *args, **kwargs):
