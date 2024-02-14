@@ -1,8 +1,8 @@
-from ImportedModule1 import SomeClass as SC, SomeDynamicClass as SDC
+from .ImportedModule1 import SomeClass as SC, SomeDynamicClass as SDC
 from src.dynamic_executor.utils import get_modules
 from src.dynamic_executor.utils.re_import import re_import_modules
 
-if __name__ == "__main__":
+def test_nested_reimport_with_modification_class_reimport_as():
     modules = get_modules()
     some_instance = SC()
     some_dynamic_instance = SDC()

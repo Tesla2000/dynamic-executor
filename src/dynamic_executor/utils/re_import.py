@@ -18,7 +18,7 @@ def re_import_dynamic_classes(
     :return: Re-imported module.
     """
     re_imported_module = importlib.import_module(module_name)
-    for variable, dynamic_class in dynamic_classes[module_name].items():
+    for variable, dynamic_class in dynamic_classes.get(module_name, {}).items():
         new_class = getattr(re_imported_module, variable)
         for instance in dynamic_class._instances:
             instance.__class__ = new_class
@@ -26,28 +26,28 @@ def re_import_dynamic_classes(
     return re_imported_module
 
 
-def get_module_variable(module: ModuleType, __locals: Dict, variable: str) -> str:
+def get_module_variable(module: ModuleType, locals_: Dict, variable: str) -> str:
     """
     Gets a module variable that has the same value as a value of given variable in a local scope.
-    Used when import as is used to recover corresponidng variable name from the module.
+    Used when import as is used to recover corresponding variable name from the module.
     :param module: A module to search the variable in.
-    :param __locals: A dictionary of local variables.
+    :param locals_: A dictionary of local variables.
     :param variable: A variable name.
     :return: A corresponding variables name from the module.
     """
     if hasattr(module, variable):
         return variable
     return next(
-        var for var in dir(module) if __locals[variable] == getattr(module, var)
+        var for var in dir(module) if locals_[variable] == getattr(module, var)
     )
 
 
-def re_import_modules(modules: Dict[str, ModuleType], __locals: Dict, __globals: Dict):
+def re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: Dict):
     """
     Re-imports specified module and updates local and global variables with changed values.
     :param modules: A dictionary of a (module name, module) pairs.
-    :param __locals: local variables typically locals().
-    :param __globals: global variables typically globals().
+    :param locals_: local variables typically locals().
+    :param globals_: global variables typically globals().
     """
     def get_valid_module(key: str, value: Any) -> Optional[Tuple[str, ModuleType]]:
         """
@@ -64,27 +64,27 @@ def re_import_modules(modules: Dict[str, ModuleType], __locals: Dict, __globals:
         return key, module
 
     locals_from_modules = dict(
-        filter(None, starmap(get_valid_module, __locals.items()))
+        filter(None, starmap(get_valid_module, locals_.items()))
     )
     globals_from_modules = dict(
-        filter(None, starmap(get_valid_module, __globals.items()))
+        filter(None, starmap(get_valid_module, globals_.items()))
     )
     local_modules = dict(
         (key, value)
-        for key, value in __locals.items()
+        for key, value in locals_.items()
         if isinstance(value, ModuleType) and key != "__builtins__"
     )
     global_modules = dict(
         (key, value)
-        for key, value in __globals.items()
+        for key, value in globals_.items()
         if isinstance(value, ModuleType) and key != "__builtins__"
     )
     local_as_translations = dict(
-        (variable, get_module_variable(module, __locals, variable))
+        (variable, get_module_variable(module, locals_, variable))
         for variable, module in locals_from_modules.items()
     )
     global_as_translations = dict(
-        (variable, get_module_variable(module, __globals, variable))
+        (variable, get_module_variable(module, globals_, variable))
         for variable, module in globals_from_modules.items()
     )
     dynamic_classes = dict(
@@ -121,10 +121,10 @@ def re_import_modules(modules: Dict[str, ModuleType], __locals: Dict, __globals:
         for variable, module in globals_from_modules.items()
     )
     for variable, value in locals_from_modules.items():
-        __locals[variable] = value
+        locals_[variable] = value
     for variable, value in globals_from_modules.items():
-        __globals[variable] = value
+        globals_[variable] = value
     for variable, module in local_modules.items():
-        __locals[variable] = module
+        locals_[variable] = module
     for variable, module in global_modules.items():
-        __globals[variable] = module
+        globals_[variable] = module

@@ -1,8 +1,13 @@
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).parent))
 import ImportedModule1
 from src.dynamic_executor.utils import get_modules
 from src.dynamic_executor.utils.re_import import re_import_modules
 
-if __name__ == "__main__":
+
+def test_nested_reimport_with_modification_module_reimport():
     modules = get_modules()
     some_instance = ImportedModule1.SomeClass()
     some_dynamic_instance = ImportedModule1.SomeDynamicClass()

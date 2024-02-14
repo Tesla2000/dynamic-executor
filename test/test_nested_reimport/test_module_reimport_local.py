@@ -1,10 +1,13 @@
+import sys
 from pathlib import Path
 
-import ImportedModule1
+sys.path.append(str(Path(__file__).parent))
 from src.dynamic_executor.utils import get_modules
 from src.dynamic_executor.utils.re_import import re_import_modules
 
-if __name__ == "__main__":
+
+def test_module_reimport():
+    import ImportedModule1
     parent = Path(__file__).parent
     parent.joinpath("ImportedModule2.py").write_text(
         parent.joinpath("ImportedModuleBackUpModified.py").read_text()
