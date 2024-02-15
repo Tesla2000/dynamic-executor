@@ -2,4 +2,4 @@
 /pyproject.toml
 /setup.cfg
 /test_upload.sh
-/docs/_build/
+/doc/_build/

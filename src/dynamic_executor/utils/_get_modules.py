@@ -11,7 +11,7 @@ venv_module = (
 )
 
 
-def get_modules() -> Dict[str, ModuleType]:
+def _get_modules() -> Dict[str, ModuleType]:
     """
     Collects all imported module except these connected with dynamic_executor.
 

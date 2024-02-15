@@ -4,7 +4,7 @@ from typing import Dict
 from ..classes.DynamicClassCreator import DynamicClassCreator
 
 
-def get_dynamic_classes(module: ModuleType) -> Dict[str, DynamicClassCreator]:
+def _get_dynamic_classes(module: ModuleType) -> Dict[str, DynamicClassCreator]:
     """Collects all dynamic classes from a module.
 
     :param module: A module to collect classes from.

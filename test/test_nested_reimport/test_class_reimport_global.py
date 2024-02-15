@@ -1,8 +1,8 @@
 from pathlib import Path
 
 from .ImportedModule1 import SomeClass, SomeDynamicClass
-from src.dynamic_executor.utils import get_modules
-from src.dynamic_executor.utils.re_import import re_import_modules
+from src.dynamic_executor.utils import _get_modules
+from src.dynamic_executor.utils._re_import import _re_import_modules
 
 
 def test_class_nested_reimport_from():
@@ -13,8 +13,8 @@ def test_class_nested_reimport_from():
     try:
         some_instance = SomeClass()
         some_dynami_instance = SomeDynamicClass()
-        modules = get_modules()
-        re_import_modules(modules, locals(), globals())
+        modules = _get_modules()
+        _re_import_modules(modules, locals(), globals())
         assert not isinstance(some_instance, SomeClass)
         assert isinstance(some_dynami_instance, SomeDynamicClass)
         assert not hasattr(some_instance, "foo")

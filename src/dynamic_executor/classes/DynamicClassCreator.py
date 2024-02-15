@@ -1,19 +1,6 @@
 from typing import List
 
 
-def new_wrapper(new):
-    """Class __new__ method wrapper that ensures that the new instance is stored in _instances list of a dynamic class.
-    """
-
-    def wrapper(cls, *args, **kwargs):
-        new_instance = new(cls, *args, **kwargs)
-        if new_instance not in cls._instances:
-            cls._instances.append(new_instance)
-        return new_instance
-
-    return wrapper
-
-
 class DynamicClassCreator(type):
     """
     Metaclass that makes classes track their instances and stores them.
@@ -28,3 +15,16 @@ class DynamicClassCreator(type):
         new_class._instances = []
         new_class.__new__ = new_wrapper(new_class.__new__)
         return new_class
+
+
+def new_wrapper(new):
+    """Class __new__ method wrapper that ensures that the new instance is stored in _instances list of a dynamic class.
+    """
+
+    def wrapper(cls, *args, **kwargs):
+        new_instance = new(cls, *args, **kwargs)
+        if new_instance not in cls._instances:
+            cls._instances.append(new_instance)
+        return new_instance
+
+    return wrapper

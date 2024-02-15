@@ -4,11 +4,11 @@ from itertools import starmap
 from types import ModuleType
 from typing import Callable, Dict, Any, Optional, Tuple
 
-from .get_dynamic_classes import get_dynamic_classes
+from ._get_dynamic_classes import _get_dynamic_classes
 from ..classes.DynamicClassCreator import DynamicClassCreator
 
 
-def re_import_dynamic_classes(
+def _re_import_dynamic_classes(
     module_name: str, dynamic_classes: Dict[str, Dict[str, DynamicClassCreator]]
 ) -> ModuleType:
     """
@@ -26,7 +26,7 @@ def re_import_dynamic_classes(
     return re_imported_module
 
 
-def get_module_variable(module: ModuleType, locals_: Dict, variable: str) -> str:
+def _get_module_variable(module: ModuleType, locals_: Dict, variable: str) -> str:
     """
     Gets a module variable that has the same value as a value of given variable in a local scope.
     Used when import as is used to recover corresponding variable name from the module.
@@ -42,7 +42,7 @@ def get_module_variable(module: ModuleType, locals_: Dict, variable: str) -> str
     )
 
 
-def re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: Dict):
+def _re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: Dict):
     """
     Re-imports specified module and updates local and global variables with changed values.
 
@@ -82,31 +82,31 @@ def re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: D
         if isinstance(value, ModuleType) and key != "__builtins__"
     )
     local_as_translations = dict(
-        (variable, get_module_variable(module, locals_, variable))
+        (variable, _get_module_variable(module, locals_, variable))
         for variable, module in locals_from_modules.items()
     )
     global_as_translations = dict(
-        (variable, get_module_variable(module, globals_, variable))
+        (variable, _get_module_variable(module, globals_, variable))
         for variable, module in globals_from_modules.items()
     )
     dynamic_classes = dict(
-        (module_name, get_dynamic_classes(module))
+        (module_name, _get_dynamic_classes(module))
         for module_name, module in modules.items()
     )
     tuple(map(importlib.reload, modules.values()))
     local_modules = dict(
-        (variable, re_import_dynamic_classes(module.__name__, dynamic_classes))
+        (variable, _re_import_dynamic_classes(module.__name__, dynamic_classes))
         for variable, module in local_modules.items()
     )
     global_modules = dict(
-        (variable, re_import_dynamic_classes(module.__name__, dynamic_classes))
+        (variable, _re_import_dynamic_classes(module.__name__, dynamic_classes))
         for variable, module in global_modules.items()
     )
     locals_from_modules = dict(
         (
             variable,
             getattr(
-                re_import_dynamic_classes(module.__name__, dynamic_classes),
+                _re_import_dynamic_classes(module.__name__, dynamic_classes),
                 local_as_translations[variable],
             ),
         )
@@ -116,7 +116,7 @@ def re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: D
         (
             variable,
             getattr(
-                re_import_dynamic_classes(module.__name__, dynamic_classes),
+                _re_import_dynamic_classes(module.__name__, dynamic_classes),
                 global_as_translations[variable],
             ),
         )

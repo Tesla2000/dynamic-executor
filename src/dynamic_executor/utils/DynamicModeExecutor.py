@@ -2,8 +2,8 @@ import traceback
 from pathlib import Path
 from typing import Generator, Dict
 
-from .get_modules import get_modules
-from .re_import import re_import_modules
+from ._get_modules import _get_modules
+from ._re_import import _re_import_modules
 
 
 class DynamicModeExecutor:
@@ -81,8 +81,8 @@ class DynamicModeExecutor:
                     traceback.print_exc()
                 yield traceback.format_exc()
             if not finnish_upon_success or not done:
-                modules = get_modules()
-                re_import_modules(modules, local_vars, global_vars)
+                modules = _get_modules()
+                _re_import_modules(modules, local_vars, global_vars)
                 if done:
                     yield
             else:

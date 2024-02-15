@@ -2,8 +2,8 @@ import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent))
-from src.dynamic_executor.utils import get_modules
-from src.dynamic_executor.utils.re_import import re_import_modules
+from src.dynamic_executor.utils import _get_modules
+from src.dynamic_executor.utils._re_import import _re_import_modules
 
 
 def test_module_reimport():
@@ -15,8 +15,8 @@ def test_module_reimport():
     try:
         some_instance = ImportedModule1.SomeClass()
         some_dynami_instance = ImportedModule1.SomeDynamicClass()
-        modules = get_modules()
-        re_import_modules(modules, locals(), globals())
+        modules = _get_modules()
+        _re_import_modules(modules, locals(), globals())
         assert not isinstance(some_instance, ImportedModule1.SomeClass)
         assert isinstance(some_dynami_instance, ImportedModule1.SomeDynamicClass)
         assert not hasattr(some_instance, "foo")

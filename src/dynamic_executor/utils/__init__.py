@@ -1,6 +1,6 @@
 __all__ = [
-    "re_import_dynamic_classes",
-    "get_modules",
+    "_re_import_dynamic_classes",
+    "_get_modules",
 ]
-from .re_import import re_import_dynamic_classes
-from .get_modules import get_modules
+from ._re_import import _re_import_dynamic_classes
+from ._get_modules import _get_modules
