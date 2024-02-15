@@ -1,6 +1,11 @@
 # Dynamic-executor library for changing python code during runtime
 
-Dynamic python is ment to be used in test development for creating and updating tests or wherever the need arises to change the code during runtime and have results visible instantaneously without restarting. The main functionality is provided by `exec_in_dynamic_mode` generator that reloads all project-root modules (neither builtin not venv modules are reloaded)
+*Remember this moment when your test ran and after a few minutes failed on some seemingly obvious error so you had to fix it, than restart it just to see it fail only a few lines of code further? If not greate, but if yes be sure to check dynamic executor which gracefully resolves such problems.*
+
+Dynamic python is ment to be used in test development for creating and updating tests or wherever the need arises to change the code during runtime and have results visible instantaneously without restarting. The main functionality is provided by `DynamicModeExecutor().execute` generator that reloads all project-root modules (neither builtin not venv modules are reloaded).
+
+## Documentation
+Check out [documentation](https://tesla2000.github.io/dython/).
 
 ## Installation
 
@@ -10,7 +15,7 @@ You can install the `dynamic-executor` package using pip:
 pip install dynamic-executor
 ```
 
-Or by cloning the repository directly :
+Or by cloning the repository directly:
 
 ```bash
 git clone git@github.com:Tesla2000/dynamic_executor.git
@@ -18,54 +23,18 @@ git clone git@github.com:Tesla2000/dynamic_executor.git
 
 ### Access
 
-PyPI: https://pypi.org/project/dynamic-executor/
+[PyPi](https://pypi.org/project/dynamic-executor/)
 
-Github: https://github.com/Tesla2000/dython
+[GitHub](https://github.com/Tesla2000/dython)
 
 ### Usage
 
-You can go through video tutorial to check utilities of Dynamic Executor https://youtu.be/RZUzBU70eKA.
-
-Here's an example of how to use the `exec_in_dynamic_mode` function:
+You can go through video tutorial to check utilities of Dynamic Executor [tutorial](https://youtu.be/laMC6NI9b2I).
 
 ```python
-# ImportedModuleFaulty.py
-from dynamic_executor import DynamicClass
-
-
-class SomeDynamicClass(DynamicClass):
-    def foo(self):
-        raise ValueError
-```
-
-```python
-# ImportedModuleValid.py
-from dynamic_executor import DynamicClass
-
-
-class SomeDynamicClass(DynamicClass):
-    def foo(self):
-        pass
-```
-
-```python
-# _test_executor.py
-dynamic_instance.foo()
-```
-
-```python
-from dython import exec_in_dynamic_mode
-parent = Path(__file__).parent
-parent.joinpath("ImportedModule.py").write_text(
-    parent.joinpath("ImportedModuleFaulty.py").read_text()
-)  # faulty version of imported module
-from ImportedModule import SomeDynamicClass
-dynamic_instance = SomeDynamicClass()
-index = -1
-for index, error in enumerate(exec_in_dynamic_mode(locals(), globals(), parent.joinpath("_test_executor.py"))):
-    if index:
-        assert False  # ensuring that the error is corrected
-    parent.joinpath("ImportedModule.py").write_text(
-        parent.joinpath("ImportedModuleValid.py").read_text()
-    )  # correcting module
+from dynamic_executor import DynamicModeExecutor
+for error_message in DynamicModeExecutor().execute(
+        locals(), globals()
+    ):
+    pass
 ```

@@ -12,6 +12,12 @@ Welcome to dynamic-executor's documentation!
 
    modules
 
+Dynamic-executor library for changing python code during runtime
+========================
+*Remember this moment when your test ran and after a few minutes failed on some seemingly obvious error so you had to fix it, than restart it just to see it fail only a few lines of code further? If not greate, but if yes be sure to check dynamic executor which gracefully resolves such problems.*
+
+Dynamic python is ment to be used in test development for creating and updating tests or wherever the need arises to change the code during runtime and have results visible instantaneously without restarting. The main functionality is provided by `DynamicModeExecutor().execute` generator that reloads all project-root modules (neither builtin not venv modules are reloaded).
+
 Why not importlib.reload
 ========================
 While importlib reload is a default built-in solution that provides basic functionality of reloading modules and it is used inside dynamic executor is has several drawbacks, namely:
@@ -27,7 +33,7 @@ While importlib reload is a default built-in solution that provides basic functi
 
 An Elusive Bug
 ========================
-As for today executor doesn't work properly when local import (in a scope of a function) can't be updated. Other configiration work as expected.
+As for today executor doesn't work properly when local import (in a scope of a function) using from can't be updated. Other configurations like global import with from or local import without from work as expected.
 
 .. image:: elusive_bug.png
   :width: 400
