@@ -1,17 +1,20 @@
+import sys
 from pathlib import Path
 
-import ImportedModule
+sys.path.append(str(Path(__file__).parent))
 from src.dynamic_executor.utils.DynamicModeExecutor import DynamicModeExecutor
 
-if __name__ == "__main__":
+
+def test_dynamic_function_import():
     parent = Path(__file__).parent
     parent.joinpath("ImportedModule.py").write_text(
         parent.joinpath("ImportedModuleFaulty.py").read_text()
     )
+    import ImportedModule
     some_dynamic_function = ImportedModule.some_dynamic_function
     index = -1
     for index, error in enumerate(
-        DynamicModeExecutor(parent.joinpath("test_executor.py")).execute(
+        DynamicModeExecutor(parent.joinpath("_test_executor.py")).execute(
             locals(), globals()
         )
     ):

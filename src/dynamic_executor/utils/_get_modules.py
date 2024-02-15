@@ -1,7 +1,8 @@
 import re
 import sys
 import platform
-from collections import OrderedDict
+from types import ModuleType
+from typing import Dict
 
 venv_module = (
     f"python{'.'.join(sys.version.split('.')[:2])}"
@@ -10,8 +11,13 @@ venv_module = (
 )
 
 
-def get_modules():
-    return OrderedDict(
+def _get_modules() -> Dict[str, ModuleType]:
+    """
+    Collects all imported module except these connected with dynamic_executor.
+
+    :return: Dictionary of (module_name, module) pairs.
+    """
+    return dict(
         (variable, value)
         for variable, value in sys.modules.items()
         if not re.findall(r"module \'[^\']+\' \((?:built-in|frozen)\)", str(value))

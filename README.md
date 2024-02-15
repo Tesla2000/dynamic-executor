@@ -49,7 +49,7 @@ class SomeDynamicClass(DynamicClass):
 ```
 
 ```python
-# test_executor.py
+# _test_executor.py
 dynamic_instance.foo()
 ```
 
@@ -62,7 +62,7 @@ parent.joinpath("ImportedModule.py").write_text(
 from ImportedModule import SomeDynamicClass
 dynamic_instance = SomeDynamicClass()
 index = -1
-for index, error in enumerate(exec_in_dynamic_mode(locals(), globals(), parent.joinpath("test_executor.py"))):
+for index, error in enumerate(exec_in_dynamic_mode(locals(), globals(), parent.joinpath("_test_executor.py"))):
     if index:
         assert False  # ensuring that the error is corrected
     parent.joinpath("ImportedModule.py").write_text(

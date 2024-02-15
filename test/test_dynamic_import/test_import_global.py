@@ -1,10 +1,13 @@
+import sys
 from pathlib import Path
 
+sys.path.append(str(Path(__file__).parent))
 import ImportedModule
-from src.dynamic_executor.utils import get_modules
-from src.dynamic_executor.utils.re_import import re_import_modules
+from src.dynamic_executor.utils import _get_modules
+from src.dynamic_executor.utils._re_import import _re_import_modules
 
-if __name__ == "__main__":
+
+def test_dynamic_import_import():
     parent = Path(__file__).parent
     parent.joinpath("ImportedModule.py").write_text(
         parent.joinpath("ImportedModuleBackUpModified.py").read_text()
@@ -16,7 +19,7 @@ if __name__ == "__main__":
         assert isinstance(standard_instance, ImportedModule.StandardClass)
         assert not hasattr(ImportedModule.SomeDynamicClass, "foo")
         assert isinstance(dynamic_instance, ImportedModule.SomeDynamicClass)
-        re_import_modules(get_modules(), locals(), globals())
+        _re_import_modules(_get_modules(), locals(), globals())
         assert hasattr(ImportedModule.StandardClass, "foo")
         assert not isinstance(standard_instance, ImportedModule.StandardClass)
         assert hasattr(ImportedModule.SomeDynamicClass, "foo")

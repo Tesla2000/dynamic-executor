@@ -2,19 +2,36 @@ import traceback
 from pathlib import Path
 from typing import Generator, Dict
 
-from .get_modules import get_modules
-from .re_import import re_import_modules
+from ._get_modules import _get_modules
+from ._re_import import _re_import_modules
 
 
 class DynamicModeExecutor:
+    """A main component of dynamic execution loop.
+    Creates executor file with access to local and global variables where code can be safely executed.
+
+    for error in DynamicModeExecutor().execute(locals(), globals()):
+        pass
+
+    With each iteration modules are reloaded and the changes applied to DynamicClass instances.
+    """
     def __init__(
         self,
-        executor_path: Path = None,
+        executor_path: Path = Path("executor.py"),
         finnish_upon_success: bool = True,
         supress_print: bool = False,
     ):
-        if executor_path is None:
-            executor_path = Path("executor.py")
+        """
+
+        :param executor_path: A path to an executor file, defaults to executor.py file parented by cwd.
+        :param finnish_upon_success:
+            Specifies if there should be any iterations after a successful execution.
+            Defaults to True if False works as an infinite loop.
+        :param supress_print:
+            Manages exception printing.
+            If True exception is printed as if it occurred during an uncontrolled runtime.
+            Exception is always yielded by loop not matter the argument.
+        """
         self.executor_path = executor_path
         self.finnish_upon_success = finnish_upon_success
         self.supress_print = supress_print
@@ -27,6 +44,20 @@ class DynamicModeExecutor:
         finnish_upon_success: bool = None,
         supress_print: bool = None,
     ) -> Generator[str, None, None]:
+        """Method used to override class parameters and accept local and global parameters.
+
+        :param local_vars: local variables that can be a subject to change usually locals().
+        :param global_vars: global variables that can be a subject to change usually global().
+        :param executor_path: A path to an executor file, defaults to one in self.
+        :param finnish_upon_success:
+            Specifies if there should be any iterations after a successful execution.
+            Defaults to a value in self.
+        :param supress_print:
+            Manages exception printing.
+            If True exception is printed as if it occurred during an uncontrolled runtime.
+            Exception is always yielded by loop not matter the argument.
+        :return: Error message if one occurred during execution. None otherwise.
+        """
         if executor_path is None:
             executor_path = self.executor_path
         if supress_print is None:
@@ -50,8 +81,8 @@ class DynamicModeExecutor:
                     traceback.print_exc()
                 yield traceback.format_exc()
             if not finnish_upon_success or not done:
-                modules = get_modules()
-                re_import_modules(modules, local_vars, global_vars)
+                modules = _get_modules()
+                _re_import_modules(modules, local_vars, global_vars)
                 if done:
                     yield
             else:
