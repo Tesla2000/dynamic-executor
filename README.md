@@ -5,7 +5,7 @@
 Dynamic python is ment to be used in test development for creating and updating tests or wherever the need arises to change the code during runtime and have results visible instantaneously without restarting. The main functionality is provided by `DynamicModeExecutor().execute` generator that reloads all project-root modules (neither builtin not venv modules are reloaded).
 
 ## Documentation
-Check out [documentation](https://tesla2000.github.io/dython/).
+Check out [documentation](https://tesla2000.github.io/dynamic-executor/).
 
 ## Installation
 
