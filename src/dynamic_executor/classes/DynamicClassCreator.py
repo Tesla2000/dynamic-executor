@@ -22,7 +22,7 @@ def new_wrapper(new):
     """
 
     def wrapper(cls, *args, **kwargs):
-        new_instance = new(cls, *args, **kwargs)
+        new_instance = new(cls)
         if new_instance not in cls._instances:
             cls._instances.append(new_instance)
         return new_instance

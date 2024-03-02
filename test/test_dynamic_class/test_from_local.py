@@ -24,3 +24,6 @@ def test_dynamic_class_import_from():
             parent.joinpath("ImportedModuleValid.py").read_text()
         )
     assert index != -1
+    parent.joinpath("ImportedModule.py").write_text(
+        parent.joinpath("ImportedModuleFaulty.py").read_text()
+    )
