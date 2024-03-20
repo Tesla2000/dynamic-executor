@@ -3,6 +3,7 @@ from inspect import getmodule
 from itertools import starmap
 from types import ModuleType
 from typing import Callable, Dict, Any, Optional, Tuple
+from warnings import warn
 
 from ._get_dynamic_classes import _get_dynamic_classes
 from ..classes.DynamicClassCreator import DynamicClassCreator
@@ -93,7 +94,10 @@ def _re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: 
         (module_name, _get_dynamic_classes(module))
         for module_name, module in modules.items()
     )
-    tuple(map(importlib.reload, modules.values()))
+    try:
+        tuple(map(importlib.reload, modules.values()))
+    except Exception as e:
+        warn(f"Dynamic executor wasn't able to fully reload {e}")
     local_modules = dict(
         (variable, _re_import_dynamic_classes(module.__name__, dynamic_classes))
         for variable, module in local_modules.items()
