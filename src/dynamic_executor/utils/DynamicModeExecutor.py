@@ -18,13 +18,13 @@ class DynamicModeExecutor:
     def __init__(
         self,
         executor_path: Path = Path("executor.py"),
-        finnish_upon_success: bool = True,
+        finish_upon_success: bool = True,
         supress_print: bool = False,
     ):
         """
 
         :param executor_path: A path to an executor file, defaults to executor.py file parented by cwd.
-        :param finnish_upon_success:
+        :param finish_upon_success:
             Specifies if there should be any iterations after a successful execution.
             Defaults to True if False works as an infinite loop.
         :param supress_print:
@@ -33,7 +33,7 @@ class DynamicModeExecutor:
             Exception is always yielded by loop not matter the argument.
         """
         self.executor_path = executor_path
-        self.finnish_upon_success = finnish_upon_success
+        self.finish_upon_success = finish_upon_success
         self.supress_print = supress_print
 
     def execute(
@@ -41,7 +41,7 @@ class DynamicModeExecutor:
         local_vars: Dict,
         global_vars: Dict,
         executor_path: Path = None,
-        finnish_upon_success: bool = None,
+        finish_upon_success: bool = None,
         supress_print: bool = None,
     ) -> Generator[str, None, None]:
         """Method used to override class parameters and accept local and global parameters.
@@ -49,7 +49,7 @@ class DynamicModeExecutor:
         :param local_vars: local variables that can be a subject to change usually locals().
         :param global_vars: global variables that can be a subject to change usually global().
         :param executor_path: A path to an executor file, defaults to one in self.
-        :param finnish_upon_success:
+        :param finish_upon_success:
             Specifies if there should be any iterations after a successful execution.
             Defaults to a value in self.
         :param supress_print:
@@ -62,8 +62,8 @@ class DynamicModeExecutor:
             executor_path = self.executor_path
         if supress_print is None:
             supress_print = self.supress_print
-        if finnish_upon_success is None:
-            finnish_upon_success = self.finnish_upon_success
+        if finish_upon_success is None:
+            finish_upon_success = self.finish_upon_success
 
         if not executor_path.exists():
             executor_path.write_text("# Save mode executor")
@@ -80,7 +80,7 @@ class DynamicModeExecutor:
                 if not supress_print:
                     traceback.print_exc()
                 yield traceback.format_exc()
-            if not finnish_upon_success or not done:
+            if not finish_upon_success or not done:
                 modules = _get_modules()
                 _re_import_modules(modules, local_vars, global_vars)
                 if done:
