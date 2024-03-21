@@ -1,4 +1,4 @@
-import re
+import inspect
 import sys
 import platform
 from types import ModuleType
@@ -20,20 +20,8 @@ def _get_modules() -> Dict[str, ModuleType]:
     return dict(
         (variable, value)
         for variable, value in sys.modules.items()
-        if not re.findall(r"module \'[^\']+\' \((?:built-in|frozen)\)", str(value))
-        and venv_module not in str(value)
+        if getattr(value, '__file__', None) is not None
+        and venv_module not in inspect.getfile(value)
+        and "pycharm-professional" not in inspect.getfile(value)
         and not variable.startswith("_")
-        and not any(
-            map(
-                variable.__contains__,
-                (
-                    "dynamic_executor",
-                    "pyexpat",
-                    "pydev",
-                    "xml.parsers.expat.",
-                    "typing.",
-                    "cython_runtime",
-                ),
-            )
-        )
     )
