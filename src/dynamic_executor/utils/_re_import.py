@@ -51,6 +51,7 @@ def _re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: 
     :param locals_: local variables typically locals().
     :param globals_: global variables typically globals().
     """
+
     def get_valid_module(key: str, value: Any) -> Optional[Tuple[str, ModuleType]]:
         """
         Gets an origin module of a given value if the value is not callable (these need no update).
@@ -62,7 +63,10 @@ def _re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: 
         if not isinstance(value, Callable):
             return
         module = getmodule(value)
-        if module not in modules.values():
+
+        if module not in modules.values() or not any(
+            var for var in dir(module) if value == getattr(module, var)
+        ):
             return
         return key, module
 
