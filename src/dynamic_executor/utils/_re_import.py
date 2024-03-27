@@ -74,7 +74,10 @@ def _re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: 
         if not isinstance(value, Callable):
             return
         module = getmodule(value)
-        if module not in modules.values():
+
+        if module not in modules.values() or not any(
+            var for var in dir(module) if value == getattr(module, var)
+        ):
             return
         return key, module
 
