@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to dynamic-executor’s documentation! &mdash; dynamic-executor 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="dynamic_executor" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            dynamic-executor
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">dynamic_executor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">dynamic-executor</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to dynamic-executor’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-dynamic-executor-s-documentation">
+<h1>Welcome to dynamic-executor’s documentation!<a class="headerlink" href="#welcome-to-dynamic-executor-s-documentation" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">dynamic_executor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dynamic_executor.html">dynamic_executor package</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="dynamic-executor-library-for-changing-python-code-during-runtime">
+<h1>Dynamic-executor library for changing python code during runtime<a class="headerlink" href="#dynamic-executor-library-for-changing-python-code-during-runtime" title="Link to this heading"></a></h1>
+<p><em>Remember this moment when your test ran and after a few minutes failed on some seemingly obvious error so you had to fix it, than restart it just to see it fail only a few lines of code further? If not greate, but if yes be sure to check dynamic executor which gracefully resolves such problems.</em></p>
+<p>Dynamic python is ment to be used in test development for creating and updating tests or wherever the need arises to change the code during runtime and have results visible instantaneously without restarting. The main functionality is provided by <cite>DynamicModeExecutor().execute</cite> generator that reloads all project-root modules (neither builtin not venv modules are reloaded).</p>
+</section>
+<section id="why-not-importlib-reload">
+<h1>Why not importlib.reload<a class="headerlink" href="#why-not-importlib-reload" title="Link to this heading"></a></h1>
+<p>While importlib reload is a default built-in solution that provides basic functionality of reloading modules and it is used inside dynamic executor is has several drawbacks, namely:</p>
+<ul class="simple">
+<li><p>it doesn’t preserve import path. If reimported module is used in an intermediate modul to modify it’s contents the intermediate module isn’t reloaded automatically;</p></li>
+<li><p>it doesn’t keep track of created instances. Reloading module with classed causes them to be recreated therefore breaking a link between them and their instances which causes isinstance() and issubclass() checks to fail. This issue is prevented with usage of DynamicClass inheritance;</p></li>
+<li><p>reload doesn’t work automatically, so each change to the code has to be detected or reloaded manually. In case of dynamic_executor all modules are reloaded by default on start of each iteration;</p></li>
+<li><p>reload can’t change local variables. Using reload causes only module instance to change when variables imported using from remain unaltered. dynamic_executor updated those variables as the modules are reloaded.</p></li>
+</ul>
+</section>
+<section id="an-elusive-bug">
+<h1>An Elusive Bug<a class="headerlink" href="#an-elusive-bug" title="Link to this heading"></a></h1>
+<p>As for today executor doesn’t work properly when local import (in a scope of a function) using from can’t be updated. Other configurations like global import with from or local import without from work as expected.</p>
+<a class="reference internal image-reference" href="_images/elusive_bug.png"><img alt="_images/elusive_bug.png" src="_images/elusive_bug.png" style="width: 400px;" /></a>
+</section>
+<section id="a-tournament-to-slay-the-elusive-bug">
+<h1>A Tournament to Slay the Elusive Bug<a class="headerlink" href="#a-tournament-to-slay-the-elusive-bug" title="Link to this heading"></a></h1>
+<p>Esteemed developers, hear me now as I beckon forth the valiant souls who dare to tread the hallowed grounds of our digital frontier! A challenge of unparalleled magnitude has befallen us, a bug so cunning, so elusive, that it eludes the grasp of our noble endeavors.</p>
+<p>Behold, a foe entrenched within the shadows of our code, wherefrom the depths of local scopes, it thwarts our every attempt at vanquishment! Yes, my comrades, within the annals of our sacred repositories lies the elusive bug, residing in the enigmatic chambers of “test_nested_reimport_with_modification/test_class_reimport_local.py” and its kin, evading even the most astute of seekers.</p>
+<p>Noble digital craftsmen, in our quest to vanquish the elusive bug, it is imperative to acknowledge that while this foe remains undefeated, it has been contained within its current form. Fear not, for there exists a strategy to navigate around its treacherous grip unscathed. By heeding the wisdom of importing in the global scope or employing import without the use of ‘from’, we can gracefully sidestep the clutches of this formidable adversary.</p>
+<p>Yet, let us not only seek triumph for the sake of our own glory, but also in the spirit of camaraderie and shared achievement. As a testament to this, I extend an offer of contribution to our repository, and pledge to immortalize the valiant souls who emerge victorious in this battle. Among the authors of our repository, there shall stand proudly the name of the first to slay the beast, their triumph immortalized for posterity.</p>
+<p>Therefore, let every keystroke resonate with the fervor of our collective determination, as we forge ahead with unwavering resolve. Together, as a fellowship of code warriors, we shall prevail in this epic tournament to conquer the indomitable bug!</p>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-right" title="dynamic_executor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Tesla2000 (fratajczak124@gmail.com).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
