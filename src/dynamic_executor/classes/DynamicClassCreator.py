@@ -7,6 +7,7 @@ class DynamicClassCreator(type):
 
     Created to update methods and class fields of dynamic class instances as the classes change.
     """
+
     created_classes: List["DynamicClassCreator"] = []
 
     def __new__(metacls, name, bases, namespace):
@@ -18,8 +19,7 @@ class DynamicClassCreator(type):
 
 
 def new_wrapper(new):
-    """Class __new__ method wrapper that ensures that the new instance is stored in _instances list of a dynamic class.
-    """
+    """Class __new__ method wrapper that ensures that the new instance is stored in _instances list of a dynamic class."""
 
     def wrapper(cls, *args, **kwargs):
         new_instance = new(cls)

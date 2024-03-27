@@ -20,7 +20,7 @@ def _get_modules() -> Dict[str, ModuleType]:
     return dict(
         (variable, value)
         for variable, value in sys.modules.items()
-        if getattr(value, '__file__', None) is not None
+        if getattr(value, "__file__", None) is not None
         and venv_module not in inspect.getfile(value)
         and "pycharm-professional" not in inspect.getfile(value)
         and not variable.startswith("_")

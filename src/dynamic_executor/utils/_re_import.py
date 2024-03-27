@@ -1,6 +1,6 @@
 import importlib
 from inspect import getmodule
-from itertools import starmap
+from itertools import starmap, chain
 from types import ModuleType
 from typing import Callable, Dict, Any, Optional, Tuple
 from warnings import warn
@@ -27,7 +27,9 @@ def _re_import_dynamic_classes(
     return re_imported_module
 
 
-def _get_module_variable(module: ModuleType, locals_: Dict, variable: str) -> str:
+def _get_module_variable(
+    module: ModuleType, locals_: Dict, variable: str
+) -> Optional[str]:
     """
     Gets a module variable that has the same value as a value of given variable in a local scope.
     Used when import as is used to recover corresponding variable name from the module.
@@ -39,7 +41,16 @@ def _get_module_variable(module: ModuleType, locals_: Dict, variable: str) -> st
     if hasattr(module, variable):
         return variable
     return next(
-        var for var in dir(module) if locals_[variable] == getattr(module, var)
+        chain.from_iterable(
+            (
+                (
+                    var
+                    for var in dir(module)
+                    if locals_[variable] == getattr(module, var)
+                ),
+                [None],
+            )
+        )
     )
 
 
@@ -51,6 +62,7 @@ def _re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: 
     :param locals_: local variables typically locals().
     :param globals_: global variables typically globals().
     """
+
     def get_valid_module(key: str, value: Any) -> Optional[Tuple[str, ModuleType]]:
         """
         Gets an origin module of a given value if the value is not callable (these need no update).
@@ -66,9 +78,7 @@ def _re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: 
             return
         return key, module
 
-    locals_from_modules = dict(
-        filter(None, starmap(get_valid_module, locals_.items()))
-    )
+    locals_from_modules = dict(filter(None, starmap(get_valid_module, locals_.items())))
     globals_from_modules = dict(
         filter(None, starmap(get_valid_module, globals_.items()))
     )
@@ -83,12 +93,22 @@ def _re_import_modules(modules: Dict[str, ModuleType], locals_: Dict, globals_: 
         if isinstance(value, ModuleType) and key != "__builtins__"
     )
     local_as_translations = dict(
-        (variable, _get_module_variable(module, locals_, variable))
-        for variable, module in locals_from_modules.items()
+        filter(
+            lambda item: item[1] is not None,
+            (
+                (variable, _get_module_variable(module, locals_, variable))
+                for variable, module in locals_from_modules.items()
+            ),
+        )
     )
     global_as_translations = dict(
-        (variable, _get_module_variable(module, globals_, variable))
-        for variable, module in globals_from_modules.items()
+        filter(
+            lambda item: item[1] is not None,
+            (
+                (variable, _get_module_variable(module, globals_, variable))
+                for variable, module in globals_from_modules.items()
+            ),
+        )
     )
     dynamic_classes = dict(
         (module_name, _get_dynamic_classes(module))

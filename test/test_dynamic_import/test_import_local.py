@@ -8,6 +8,7 @@ from src.dynamic_executor.utils._re_import import _re_import_modules
 
 def test_dynamic_import_import():
     import ImportedModule
+
     parent = Path(__file__).parent
     parent.joinpath("ImportedModule.py").write_text(
         parent.joinpath("ImportedModuleBackUpModified.py").read_text()

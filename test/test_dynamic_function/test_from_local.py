@@ -9,6 +9,7 @@ def test_dynamic_function_import_from():
         parent.joinpath("ImportedModuleFaulty.py").read_text()
     )
     from .ImportedModule import some_dynamic_function
+
     index = -1
     for index, error in enumerate(
         DynamicModeExecutor(parent.joinpath("_test_executor.py")).execute(

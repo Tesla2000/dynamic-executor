@@ -11,6 +11,7 @@ def test_dynamic_class_import_from():
     )
     sys.path.append(str(parent))
     from .ImportedModule import SomeDynamicClass
+
     dynamic_instance = SomeDynamicClass()
     index = -1
     for index, error in enumerate(

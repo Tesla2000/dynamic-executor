@@ -11,6 +11,7 @@ def test_dynamic_function_import():
         parent.joinpath("ImportedModuleFaulty.py").read_text()
     )
     import ImportedModule
+
     some_dynamic_function = ImportedModule.some_dynamic_function
     index = -1
     for index, error in enumerate(

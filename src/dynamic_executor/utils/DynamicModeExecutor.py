@@ -15,6 +15,7 @@ class DynamicModeExecutor:
 
     With each iteration modules are reloaded and the changes applied to DynamicClass instances.
     """
+
     def __init__(
         self,
         executor_path: Path = Path("executor.py"),
